@@ -26,7 +26,7 @@ for (let i = 0; i < 2; i++) {
     appData.expenses[a] = b;
     } else {
     alert("Спробуйте ще раз");
-    i = 0;
+    --i;
     }
 }
 
