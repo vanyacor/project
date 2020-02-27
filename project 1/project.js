@@ -18,28 +18,41 @@ let appData = {
 
 for (let i = 0; i < 2; i++) {
     let a = prompt("Введіть обов'язкову статтю витрат"),
-    b = prompt("У скільки обійдеться");
-    
-    if (typeof(a) === 'string' && (typeof(a)) != null && (typeof(b)) != null
-    && a != "" && b != "" && a.length < 50) {
-    console.log("done");
-    appData.expenses[a] = b;
+        b = prompt("У скільки обійдеться");
+
+    if (typeof (a) === 'string' && (typeof (a)) != null && (typeof (b)) != null &&
+        a != "" && b != "" && a.length < 50) {
+        console.log("done");
+        appData.expenses[a] = b;
     } else {
-    alert("Спробуйте ще раз");
-    --i;
+        alert("Спробуйте ще раз");
+        --i;
     }
 }
 
-appData.moneyPerday = appData.budget / 30;
-
-alert("Щоденний бюджет: " + appData.moneyPerday);
-
-if (appData.moneyPerday < 100) {
-    console.log("Мінімальний рівень достатку");
-} else if (appData.moneyPerday > 100 && appData.moneyPerday < 2000) {
-    console.log("Середній рівень достатку");
-} else if (appData.moneyPerday > 2000) {
-    console.log("Високий рівень достатку");
-} else {
-    сonsole.log("Сталася помилка");
+function detectDayBudget() {
+    appData.moneyPerday = appData.budget / 30;
+    alert("Щоденний бюджет: " + appData.moneyPerday);
 }
+
+function detectLevel() {
+    if (appData.moneyPerday < 100) {
+        console.log("Мінімальний рівень достатку");
+    } else if (appData.moneyPerday > 100 && appData.moneyPerday < 2000) {
+        console.log("Середній рівень достатку");
+    } else if (appData.moneyPerday > 2000) {
+        console.log("Високий рівень достатку");
+    } else {
+        сonsole.log("Сталася помилка");
+    }
+}
+
+function chooseOptExpenses () {
+    appData.optionalExpenses["1"] = prompt("Стаття не обов'язкових витрат?");
+    appData.optionalExpenses["2"] = prompt("Ще одна?");
+    appData.optionalExpenses["3"] = prompt("Остання?");
+}
+
+detectDayBudget();
+detectLevel();
+chooseOptExpenses();
