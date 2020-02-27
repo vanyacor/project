@@ -1,11 +1,16 @@
 "use strict";
 
-do {
-    var money = parseInt(prompt("Ваш бюджет на місяць?", "200"));
-    console.log(money);
-} while (isNaN(money) || money == 0);
+let time, money;
 
-let time = prompt("Введіть дату в форматі YYYY-MM-DD", "1999-12-09");
+function start() {
+    do {
+        money = parseInt(prompt("Ваш бюджет на місяць?", "200"));
+        console.log(money);
+    } while (isNaN(money) || money == null || money == "");
+
+    time = prompt("Введіть дату в форматі YYYY-MM-DD", "1999-12-09");
+}
+start();
 
 let appData = {
     budget: money, //Внесення значення
@@ -13,25 +18,27 @@ let appData = {
     expenses: {},
     optionalExpenses: {},
     income: [],
-    saving: false
+    savings: true
 };
 
-for (let i = 0; i < 2; i++) {
-    let a = prompt("Введіть обов'язкову статтю витрат"),
-        b = prompt("У скільки обійдеться");
+function chooseExpenses() {
+    for (let i = 0; i < 2; i++) {
+        let a = prompt("Введіть обов'язкову статтю витрат"),
+            b = prompt("У скільки обійдеться");
 
-    if (typeof (a) === 'string' && (typeof (a)) != null && (typeof (b)) != null &&
-        a != "" && b != "" && a.length < 50) {
-        console.log("done");
-        appData.expenses[a] = b;
-    } else {
-        alert("Спробуйте ще раз");
-        --i;
+        if (typeof (a) === 'string' && (typeof (a)) != null && (typeof (b)) != null &&
+            a != "" && b != "" && a.length < 50) {
+            console.log("done");
+            appData.expenses[a] = b;
+        } else {
+            alert("Спробуйте ще раз");
+            --i;
+        }
     }
 }
 
 function detectDayBudget() {
-    appData.moneyPerday = appData.budget / 30;
+    appData.moneyPerday = (appData.budget / 30).toFixed();
     alert("Щоденний бюджет: " + appData.moneyPerday);
 }
 
@@ -47,12 +54,26 @@ function detectLevel() {
     }
 }
 
-function chooseOptExpenses () {
+function chooseOptExpenses() {
     appData.optionalExpenses["1"] = prompt("Стаття не обов'язкових витрат?");
     appData.optionalExpenses["2"] = prompt("Ще одна?");
     appData.optionalExpenses["3"] = prompt("Остання?");
 }
 
+function checkSavings () {
+    if(appData.savings == true) {
+        let save = +prompt("Яка сума збережень?"),
+            percent = +prompt("Під який процент?");
+            
+        appData.monthIncome = save/100/12*percent;   
+        alert("Надходження в місяц з Вашого депозиту: " + appData.monthIncome); 
+             
+    }
+}
+
+chooseExpenses();
 detectDayBudget();
 detectLevel();
 chooseOptExpenses();
+checkSavings();
+
