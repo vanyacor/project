@@ -17,26 +17,137 @@ let startBut = document.getElementById('start'),
     countBudgetBtn = document.getElementsByTagName('button')[2],
 
     optionalExpensesItem = document.querySelectorAll('.optionalexpenses-item'),
-    
+
     chooseIncome = document.querySelector('#income'),
     savingsCheckBox = document.querySelector('#savings'),
     chooseSum = document.querySelector('#sum'),
     choosePercent = document.querySelector('#percent'),
-    
+
     yearValue = document.querySelector('.year-value'),
     monthValue = document.querySelector('.month-value'),
     dayValue = document.querySelector('.day-value');
 
 let time, money;
 
-function start() {
+expensesItemBtn.disabled = "disabled";
+optionalExpensesBtn.disabled = "disabled";
+countBudgetBtn.disabled = "disabled";
+
+startBut.addEventListener('click', function () {
+    time = prompt("Введіть дату в форматі YYYY-MM-DD", "1999-12-09");
+    appData.timeData = time;
+    yearValue.value = new Date(Date.parse(time)).getFullYear();
+    monthValue.value = new Date(Date.parse(time)).getMonth() + 1;
+    dayValue.value = new Date(Date.parse(time)).getDate();
+
     do {
         money = parseInt(prompt("Ваш бюджет на місяць?", "200"));
         console.log(money);
     } while (isNaN(money) || money == null || money == "");
+    appData.budget = money;
+    budgetValue.textContent = money.toFixed();
 
-    time = prompt("Введіть дату в форматі YYYY-MM-DD", "1999-12-09");
-}
+    expensesItemBtn.disabled = "";
+optionalExpensesBtn.disabled = "";
+countBudgetBtn.disabled = "";
+});
+
+expensesItemBtn.addEventListener('click', function () {
+    var sum = 0;
+
+    for (let i = 0; i < expensesItems.length; i++) {
+        let a = expensesItems[i].value,
+            b = expensesItems[++i].value;
+
+        if (typeof (a) === 'string' && (typeof (a)) != null && (typeof (b)) != null &&
+            a != "" && b != "" && a.length < 50) {
+            console.log("done");
+            appData.expenses[a] = b;
+            sum += +b;
+            
+        } 
+        else {
+            i = expensesItems.length;
+            sum = "Enter all values";
+            
+        }
+    }
+    if (isNaN(sum) && sum != "Enter all values") {
+        expensesValue.textContent = "Enter only numbers";
+    }
+    else {
+    expensesValue.textContent = sum;
+    appData.sumExpense = sum;
+    }
+});
+
+optionalExpensesBtn.addEventListener('click', function () {
+    for (let i = 0; i <= optionalExpensesItem.length; i++) {
+        let opt = optionalExpensesItem[i].value;
+        appData.optionalExpenses[i] = opt;
+        optionalExpensesValue.textContent += appData.optionalExpenses[i] + ' ';
+    }
+});
+
+countBudgetBtn.addEventListener('click', function () {
+    if (appData.budget != undefined && isNaN(appData.sumExpense) == false && appData.sumExpense != "" && appData.sumExpense != null) {
+        appData.moneyPerday = ((appData.budget - appData.sumExpense)/ 30).toFixed();
+        dayBudgetValue.textContent = appData.moneyPerday;
+
+        if (appData.moneyPerday < 100) {
+            levelValue.textContent = "Мінімальний рівень достатку";
+        } else if (appData.moneyPerday > 100 && appData.moneyPerday < 2000) {
+            levelValue.textContent = "Середній рівень достатку";
+        } else if (appData.moneyPerday > 2000) {
+            levelValue.textContent = "Високий рівень достатку";
+        } else {
+            levelValue.textContent = "Сталася помилка";
+        }
+    } else {
+        dayBudgetValue.textContent = "Сталася помилка, спробуйте ввести обов'язкові витрати";
+    }
+});
+
+chooseIncome.addEventListener('change', function () {
+    var items = chooseIncome.value;
+    appData.income = items.split(', ');
+    incomeValue.textContent = appData.income;
+});
+
+savingsCheckBox.addEventListener('click', function() {
+    if (appData.savings == true) {
+        appData.savings = false; 
+    }
+    else {
+        appData.savings = true;
+    }
+});
+
+chooseSum.addEventListener('input', function() {
+     if (appData.savings == true) {
+         let sum = +chooseSum.value,
+             percent = +choosePercent.value;
+
+             appData.monthIncome = sum / 100 / 12 * percent;
+             appData.yearIncome = sum / 100 * percent;
+
+             monthSavingsValue.textContent = appData.monthIncome.toFixed(1);
+             yearSavingsValue.textContent = appData.yearIncome.toFixed(1);
+     }
+});
+
+choosePercent.addEventListener('input', function() {
+    if (appData.savings == true) {
+        let sum = +chooseSum.value,
+             percent = +choosePercent.value;
+
+             appData.monthIncome = sum / 100 / 12 * percent;
+             appData.yearIncome = sum / 100 * percent;
+
+             monthSavingsValue.textContent = appData.monthIncome.toFixed(1);
+             yearSavingsValue.textContent = appData.yearIncome.toFixed(1);
+    }
+});
 
 
 let appData = {
@@ -45,81 +156,7 @@ let appData = {
     expenses: {},
     optionalExpenses: {},
     income: [],
-    savings: true,
-    chooseExpenses: function () {
-        for (let i = 0; i < 2; i++) {
-            let a = prompt("Введіть обов'язкову статтю витрат"),
-                b = prompt("У скільки обійдеться");
-
-            if (typeof (a) === 'string' && (typeof (a)) != null && (typeof (b)) != null &&
-                a != "" && b != "" && a.length < 50) {
-                console.log("done");
-                appData.expenses[a] = b;
-            } else {
-                alert("Спробуйте ще раз");
-                --i;
-            }
-        }
-    },
-    detectDayBudget: function () {
-        appData.moneyPerday = (appData.budget / 30).toFixed();
-        alert("Щоденний бюджет: " + appData.moneyPerday);
-    },
-    detectLevel: function () {
-        if (appData.moneyPerday < 100) {
-            console.log("Мінімальний рівень достатку");
-        } else if (appData.moneyPerday > 100 && appData.moneyPerday < 2000) {
-            console.log("Середній рівень достатку");
-        } else if (appData.moneyPerday > 2000) {
-            console.log("Високий рівень достатку");
-        } else {
-            сonsole.log("Сталася помилка");
-        }
-    },
-    checkSavings: function () {
-        if (appData.savings == true) {
-            let save = +prompt("Яка сума збережень?"),
-                percent = +prompt("Під який процент?");
-
-            appData.monthIncome = save / 100 / 12 * percent;
-            alert("Надходження в місяц з Вашого депозиту: " + appData.monthIncome);
-
-        }
-    },
-    chooseOptExpenses: function () {
-        for (let i = 1; i <= 3; i++) {
-            let opt = prompt("Стаття не обов'язкових витрат?", "");
-            appData.optionalExpenses[i] = opt;
-        }
-    },
-    chooseIncome: function () {
-        var numbersOfValues = 1,
-            incomes = '';
-
-        do {
-            var items = prompt('Що принесе додатковий дохід? (Перечислити через кому \", \")', '');
-            console.log(items);
-
-            if (typeof (items) === 'string' && items != "" && items != null) {
-                appData.income = items.split(', ');
-
-                var addItems = prompt('Можливо ще щось?', "");
-
-                if (typeof (addItems) === 'string' && addItems != "" && addItems != null)
-                    appData.income.push(addItems);
-            }
-        } while (typeof (items) !== 'string' || items == "" || items == null);
-        appData.income.sort();
-
-        appData.income.forEach(function (incValues) {
-
-            incomes = incomes + " " + numbersOfValues + ". " + incValues;
-            numbersOfValues++;
-        });
-
-        alert("Способи дод. заробітку:" + incomes);
-
-    }
+    savings: false
 };
 
 function review() {
