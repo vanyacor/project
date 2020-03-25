@@ -1,5 +1,32 @@
 'use strict';
 
+let startBut = document.getElementById('start'),
+    budgetValue = document.getElementsByClassName('budget-value')[0],
+    dayBudgetValue = document.getElementsByClassName('daybudget-value')[0],
+    levelValue = document.getElementsByClassName('level-value')[0],
+    expensesValue = document.getElementsByClassName('expenses-value')[0],
+    optionalExpensesValue = document.getElementsByClassName('optionalexpenses-value')[0],
+    incomeValue = document.getElementsByClassName('income-value')[0],
+    monthSavingsValue = document.getElementsByClassName('monthsavings-value')[0],
+    yearSavingsValue = document.getElementsByClassName('yearsavings-value')[0],
+
+    expensesItems = document.getElementsByClassName('expenses-item'),
+
+    expensesItemBtn = document.getElementsByTagName('button')[0],
+    optionalExpensesBtn = document.getElementsByTagName('button')[1],
+    countBudgetBtn = document.getElementsByTagName('button')[2],
+
+    optionalExpensesItem = document.querySelectorAll('.optionalexpenses-item'),
+    
+    chooseIncome = document.querySelector('#income'),
+    savingsCheckBox = document.querySelector('#savings'),
+    chooseSum = document.querySelector('#sum'),
+    choosePercent = document.querySelector('#percent'),
+    
+    yearValue = document.querySelector('.year-value'),
+    monthValue = document.querySelector('.month-value'),
+    dayValue = document.querySelector('.day-value');
+
 let time, money;
 
 function start() {
@@ -10,7 +37,7 @@ function start() {
 
     time = prompt("Введіть дату в форматі YYYY-MM-DD", "1999-12-09");
 }
-start();
+
 
 let appData = {
     budget: money, //Внесення значення
