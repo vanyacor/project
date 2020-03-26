@@ -82,9 +82,8 @@ expensesItemBtn.addEventListener('click', function () {
 });
 
 optionalExpensesBtn.addEventListener('click', function () {
-    for (let i = 0; i <= optionalExpensesItem.length; i++) {
-        let opt = optionalExpensesItem[i].value;
-        appData.optionalExpenses[i] = opt;
+    for (let i = 0; i < optionalExpensesItem.length; i++) {
+        appData.optionalExpenses[i] = optionalExpensesItem[i].value;
         optionalExpensesValue.textContent += appData.optionalExpenses[i] + ' ';
     }
 });
